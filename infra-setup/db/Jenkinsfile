@@ -1,0 +1,107 @@
+/**
+ * Pipeline for deploying SQL tables in behaviosense database cluster in AWS
+ **/
+
+TF_IMG = "terraform:latest"
+
+CONFIG = [
+    prod: [
+        'aws_region': 'ap-south-1',
+        'credentials': 'external-jenkins-access'
+    ]
+]
+
+
+pipeline {
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['dummy', 'dev', 'sit', 'prod'],
+            description: 'Select Target Environment'
+        )
+    } // parameters
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    } // options
+
+    agent {
+        label 'docker-builder'
+    } // agent
+
+    stages {
+        stage('Setup Environment') {
+            steps {
+                script {
+                    ENV = params.ENV
+                    if (ENV == null || ENV == 'dummy') {
+                        currentBuild.result = 'ABORTED'
+                        error("Invalid or missing Environment: ${ENV}")
+                    }
+                    echo "Deploying to ${ENV}"
+                    ENV_CONF = CONFIG[ENV]
+                    AWS_REGION = ENV_CONF['aws_region']
+                    CREDENTIALS = ENV_CONF['credentials']
+
+                } // script
+            } // steps
+        } // stage
+
+        stage('Fetch Endpoint') {
+            steps {
+                script{
+                    docker.image("${TF_IMG}").inside(' -u 0') {
+                        withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
+                            dir("infra-setup/db") {
+                                DB_ENDPOINT = sh(script:"aws ssm get-parameter --with-decryption --name '/tyropower/${ENV}/mysql/host/reader' --query 'Parameter.Value'",returnStdout: true)
+                                echo "${DB_ENDPOINT}"
+                            } // dir
+                        } // withAWS
+                    }
+                } // script
+            } // steps
+        } // stage
+
+        stage('Approve Plan') {
+            steps {
+                script {
+                    USERINPUT = input(id: 'ConfirmPlan',
+                        message: 'Create DB user and Tables?',
+                        parameters: [ [
+                            $class: 'BooleanParameterDefinition',
+                            defaultValue: false,
+                            description: 'Create behaviosense user and Tables in DB',
+                            name: 'confirm'
+                        ] ]
+                    )
+                } // script
+            } // steps
+        } // stage
+
+        stage('Creating  Tables') {
+            when {
+                    expression { (USERINPUT == true) }
+            }
+            steps {
+                script {
+                    docker.image("${TF_IMG}").inside(' -u 0') {
+                        withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
+                            dir("infra-setup/db") {
+                                sh "sh -x dbinit.sh"
+                            }
+                        } // withAWS
+                    }
+                }
+
+            } // steps
+        } // stage
+    } // stages
+
+    post {
+        always {
+            node('docker-builder') {
+                cleanWs()
+            }
+        } // always
+    } // post
+} // pipeline
