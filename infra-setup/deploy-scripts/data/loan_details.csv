@@ -1,0 +1,10 @@
+LoanID,LoanCustomerID,Term,Type,CurrLoanAmt,Annual_Income,Credit_Score,HomeOwnership
+f738779f,611313,Short Term,Education loan,400000,,,Own Home	
+6dcc0947,611317,Short Term,car loan,500000,5,,Own Home
+f7744d01,611319,Long Term,home lone,2100000,11,750,Home Mortgage
+83721ffb,611304,Short Term,home lone,1500000,10,750,Own Home
+08f3789f,611309,Short Term,car loan,900000,11,731,Own Home
+a4957169,611322,Short Term,car loan,700000,9,744,Own Home
+1e5e3699,611327,Long Term,home lone,1200000,15,,Own Home
+930c7cb3,611329,Long Term,home lone,2500000,5,709,Own Home
+8ab9234f,611330,Short Term,Two wheeler loan,125000,6,,Rent
