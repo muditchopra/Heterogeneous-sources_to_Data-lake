@@ -1,0 +1,43 @@
+/**
+ * Pipeline for deploying main docker image to docker hub
+ **/
+pipeline{
+    environment {
+        registry = "muditchopra/terraform"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
+	agent {
+        label 'docker-build'
+    } // agent
+
+	stages {
+		stage('Building Image') {
+			steps{
+                script {
+                    dockerImage = docker.build registry + ":latest"
+                }//script
+            }//steps
+		}//stage
+
+		stage('Deploy Image') {
+			steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push()
+                    }
+                }//script
+            }//stpes
+		}//stage
+
+	}
+
+	post {
+		always {
+            node('docker-builder') {
+                cleanWs()
+            }
+        } // always
+	}//post
+
+}
