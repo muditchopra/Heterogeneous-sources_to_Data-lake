@@ -1,0 +1,71 @@
+/**
+ * Pipeline for deploying locking and state infra for Terraform
+ **/
+BUILD_IMAGE = "terraform:latest"
+CONFIG = [
+    prod: [
+        'aws_region': 'ap-south-1',
+        'credentials': 'external-jenkins-access'
+    ]
+]
+
+pipeline {
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['dummy', 'dev', 'sit', 'prod'],
+            description: 'Select Target Environment'
+        )
+    } // parameters
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    } // options
+    agent {
+        docker {
+            label 'docker-builder'
+            image "$BUILD_IMAGE"
+        } // docker
+    } // agent
+    stages {
+        stage('Setup Environment') {
+            steps {
+                script {
+                    ENV = params.ENV
+                    if (ENV == null || ENV == 'CHOOSE') {
+                        currentBuild.result = 'ABORTED'
+                        error("Invalid or missing Environment: ${ENV}")
+                    }
+                    echo "Deploying to ${ENV}"
+                    ENV_CONF = CONFIG[ENV]
+                    AWS_REGION = ENV_CONF['aws_region']
+                    CREDENTIALS = ENV_CONF['credentials']
+                    STACK_NAME = "${ENV}-tyropower-terraformstate"
+                } // script
+            } // steps
+        } // stage
+        stage('Deploy') {
+            steps {
+                sendtoBuildHistory("Environment: ${ENV}")
+
+                withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
+                    cfnUpdate(
+                        stack:"${STACK_NAME}",
+                        file:"cloudformationstack/statelockinfra.yml",
+                        onFailure:"ROLLBACK",
+                        pollInterval:5000,
+                        timeoutInMinutes:10,
+                        params:[
+                            'Prefix': 'tyropower',
+                            'Environment': "${ENV}"
+                            ]
+                        )
+                } // withAWS
+            } // steps
+        } // stage
+    } // stages
+    post {
+        always {
+            cleanWs()
+        } // always
+    } // post
+} // pipeline

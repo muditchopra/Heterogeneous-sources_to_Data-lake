@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: An S3 bucket plus DynamoDB table to be used by Terraform for remote state storage and locking.
+Parameters:
+  Prefix:
+    Description: Stack prefix
+    Type: String
+  Environment:
+    Description: Name of environment
+    Type: String
+    AllowedValues:
+      - dev
+      - sit
+      - prod
+Resources:
+  TerraformStateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${Environment}-${Prefix}-terraform-state-${AWS::Region}-${AWS::AccountId}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'aws:kms'
+              KMSMasterKeyID: !ImportValue CoreVPC:KmsKeys:S3:Id
+      VersioningConfiguration:
+        Status: Enabled
+  TerraformStateBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: !Sub '${Environment}-${Prefix}-terraform-state-policy'
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 's3:*'
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:user/external-jenkins-access'
+            Resource: !Sub 'arn:aws:s3:::${TerraformStateBucket}/*'
+      Bucket: !Ref TerraformStateBucket
+  TerraformStateLockTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: 'PAY_PER_REQUEST'
+      TableName: !Sub '${Environment}-${Prefix}-terraform-state'
+      AttributeDefinitions:
+        - AttributeName: 'LockID'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'LockID'
+          KeyType: 'HASH'
+      Tags:
+        - Key: Name
+          Value: 'Terraform Remote State Lock Table'
+Outputs:
+  TerraformRemotestateBucket:
+    Description: A reference to the Terraform Remotestate bucket
+    Export:
+      Name: !Sub ${Environment}-${Prefix}-Terraform-State-Bucket
+    Value: !Ref TerraformStateBucket
+
+  TerraformRemotestateLockTable:
+    Description: A reference to the Terraform State Lock Table
+    Export:
+      Name: !Sub ${Environment}-${Prefix}-Terraform-State-LockTable
+    Value: !Ref TerraformStateLockTable
