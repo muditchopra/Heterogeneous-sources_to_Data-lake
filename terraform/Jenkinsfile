@@ -7,9 +7,7 @@ pipeline{
         registryCredential = 'dockerhub'
         dockerImage = ''
     }
-	agent {
-        label 'docker-build'
-    } // agent
+	agent any
 
 	stages {
 		stage('Building Image') {
@@ -34,7 +32,7 @@ pipeline{
 
 	post {
 		always {
-            node('docker-build') {
+            node() {
                 cleanWs()
             }
         } // always

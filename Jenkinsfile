@@ -25,9 +25,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20'))
     } // options
 
-    agent {
-        label 'docker-builder'
-    } // agent
+    agent any
 
     stages {
         stage('Setup Environment') {
@@ -124,7 +122,7 @@ pipeline {
 
     post {
         always {
-            node('docker-builder') {
+            node() {
                 cleanWs()
             }
         } // always
