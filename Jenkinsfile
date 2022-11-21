@@ -43,7 +43,8 @@ pipeline {
                     AWS_REGION = ENV_CONF['aws_region']
                     CREDENTIALS = ENV_CONF['credentials']
                     BUCKET_NAME = "$ENV-tyropower-infra-$AWS_REGION"
-                    SCRIPT_BUCKET_NAME = "$ENV-tyropower-data-$AWS_REGION"
+                    DATALAKE_BUCKET_NAME = "$ENV-tyropower-datalake-$AWS_REGION"
+                    SCRIPT_BUCKET_NAME = "$ENV-tyropower-scripts-$AWS_REGION"
                 } // script
             } // steps
         } // stage
@@ -55,7 +56,8 @@ pipeline {
                         withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                             dir("infra-setup/deploy-scripts") {
                                 sh "python add-key-pairs.py $BUCKET_NAME $AWS_REGION"
-                                sh "python s3-bucket.py $SCRIPT_BUCKET_NAME $AWS_REGION"
+                                sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
+                                sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
                             }
                         }
                     }
