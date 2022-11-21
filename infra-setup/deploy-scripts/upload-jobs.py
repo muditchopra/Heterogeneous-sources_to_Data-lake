@@ -29,10 +29,10 @@ def encrypt_bucket(region, bucketname, s3_client):
 
 def uplode_s3_bucket(bucketname,region):
     s3 = s3_client(region)
-    csv_files = glob.glob('data/*')
-    folder_name = 'bronze/data'
-    for filename in csv_files:
-        key = '%s/%s'% (folder_name, os.path.basename(filename))
+    py_files = glob.glob("glue-jobs/glue-job-*.py")
+    folder_name = 'scripts'
+    for filename in py_files:
+        key = "%s/%s" % (folder_name, os.path.basename(filename))
         print("Putting %s as %s" % (filename,key))
         s3.upload_file(filename, Bucket=bucketname, key=key)
 
