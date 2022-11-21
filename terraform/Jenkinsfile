@@ -34,7 +34,7 @@ pipeline{
 
 	post {
 		always {
-            node('docker-builder') {
+            node('docker-build') {
                 cleanWs()
             }
         } // always
