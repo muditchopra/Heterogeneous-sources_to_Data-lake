@@ -33,7 +33,7 @@ Resources:
           - Effect: Allow
             Action: 's3:*'
             Principal:
-              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:user/external-jenkins-access'
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:user/external-datalake-access'
             Resource: !Sub 'arn:aws:s3:::${TerraformStateBucket}/*'
       Bucket: !Ref TerraformStateBucket
   TerraformStateLockTable:
