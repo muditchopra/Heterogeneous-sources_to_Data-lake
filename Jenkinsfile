@@ -12,6 +12,7 @@ CONFIG = [
     ]
 ]
 
+TF_IMG.pull()
 
 pipeline {
     parameters {
@@ -52,7 +53,6 @@ pipeline {
             steps {
                 script{
                     docker.withRegistry( '', registryCredential ) {
-                        ${TF_IMG}.pull()
                         docker.image("${TF_IMG}").inside {
                             echo 'creating key pair'
                             withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
