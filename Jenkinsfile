@@ -2,12 +2,13 @@
  * Pipeline for deploying main behaviosense backend resources to AWS
  **/
 
-TF_IMG = "docker.io/muditchopra/terraform:latest"
+TF_IMG = "muditchopra/terraform:latest"
 
 CONFIG = [
     prod: [
         'aws_region': 'ap-south-1',
         'credentials': 'external-jenkins-access'
+        'registryCredential': 'dockerhub'
     ]
 ]
 
@@ -40,6 +41,7 @@ pipeline {
                     ENV_CONF = CONFIG[ENV]
                     AWS_REGION = ENV_CONF['aws_region']
                     CREDENTIALS = ENV_CONF['credentials']
+                    registryCredential = ENV_CONF['registryCredential']
                     BUCKET_NAME = "$ENV-tyropower-infra-$AWS_REGION"
                     DATALAKE_BUCKET_NAME = "$ENV-tyropower-datalake-$AWS_REGION"
                     SCRIPT_BUCKET_NAME = "$ENV-tyropower-scripts-$AWS_REGION"
@@ -49,13 +51,15 @@ pipeline {
         stage('Pre Deploy') {
             steps {
                 script{
-                    docker.image("${TF_IMG}").inside {
-                        echo 'creating key pair'
-                        withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
-                            dir("infra-setup/deploy-scripts") {
-                                sh "python add-key-pairs.py $BUCKET_NAME $AWS_REGION"
-                                sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
-                                sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
+                    docker.withRegistry( '', registryCredential ) {
+                        docker.image("${TF_IMG}").inside {
+                            echo 'creating key pair'
+                            withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
+                                dir("infra-setup/deploy-scripts") {
+                                    sh "python add-key-pairs.py $BUCKET_NAME $AWS_REGION"
+                                    sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
+                                    sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
+                                }
                             }
                         }
                     }
