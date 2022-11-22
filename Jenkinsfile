@@ -2,7 +2,7 @@
  * Pipeline for deploying main behaviosense backend resources to AWS
  **/
 
-TF_IMG = "muditchopra/terraform:latest"
+TF_IMG = "docker.io/muditchopra/terraform:latest"
 
 CONFIG = [
     prod: [
