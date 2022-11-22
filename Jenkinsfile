@@ -12,7 +12,6 @@ CONFIG = [
     ]
 ]
 
-TF_IMG.pull()
 
 pipeline {
     parameters {
@@ -46,6 +45,7 @@ pipeline {
                     BUCKET_NAME = "$ENV-tyropower-infra-$AWS_REGION"
                     DATALAKE_BUCKET_NAME = "$ENV-tyropower-datalake-$AWS_REGION"
                     SCRIPT_BUCKET_NAME = "$ENV-tyropower-scripts-$AWS_REGION"
+                    img = "muditchopra/terraform:latest"
                 } // script
             } // steps
         } // stage
@@ -53,6 +53,7 @@ pipeline {
             steps {
                 script{
                     docker.withRegistry( '', registryCredential ) {
+                        img.pull()
                         docker.image("${TF_IMG}").inside {
                             echo 'creating key pair'
                             withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
