@@ -2,7 +2,7 @@
  * Pipeline for deploying main behaviosense backend resources to AWS
  **/
 
-TF_IMG = "terraform:latest"
+TF_IMG = "muditchopra/terraform:latest"
 
 CONFIG = [
     prod: [
@@ -122,9 +122,7 @@ pipeline {
 
     post {
         always {
-            node() {
                 cleanWs()
-            }
         } // always
     } // post
 } // pipeline
