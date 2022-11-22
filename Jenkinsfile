@@ -47,22 +47,19 @@ pipeline {
                     BUCKET_NAME = "$ENV-tyropower-infra-$AWS_REGION"
                     DATALAKE_BUCKET_NAME = "$ENV-tyropower-datalake-$AWS_REGION"
                     SCRIPT_BUCKET_NAME = "$ENV-tyropower-scripts-$AWS_REGION"
-                    img = "muditchopra/terraform:latest"
                 } // script
             } // steps
         } // stage
         stage('Pre Deploy') {
             steps {
                 script{
-                    docker.withRegistry( '', registryCredential ) {
-                        docker.image("${TF_IMG}").inside {
-                            echo 'creating key pair'
-                            withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
-                                dir("infra-setup/deploy-scripts") {
-                                    sh "python add-key-pairs.py $BUCKET_NAME $AWS_REGION"
-                                    sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
-                                    sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
-                                }
+                    docker.image("${TF_IMG}").inside {
+                        echo 'creating key pair'
+                        withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
+                            dir("infra-setup/deploy-scripts") {
+                                sh "python add-key-pairs.py $BUCKET_NAME $AWS_REGION"
+                                sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
+                                sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
                             }
                         }
                     }
