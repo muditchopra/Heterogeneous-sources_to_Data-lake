@@ -26,7 +26,9 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20'))
     } // options
 
-    agent any
+    agent {
+        docker {image "$TF_IMG"}
+    }
 
     stages {
         stage('Setup Environment') {
@@ -53,7 +55,6 @@ pipeline {
             steps {
                 script{
                     docker.withRegistry( '', registryCredential ) {
-                        img.pull()
                         docker.image("${TF_IMG}").inside {
                             echo 'creating key pair'
                             withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
