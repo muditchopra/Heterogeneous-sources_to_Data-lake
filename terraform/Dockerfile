@@ -26,7 +26,7 @@ RUN addgroup -g 500 core && \
 
 RUN pip install pip -U && apk --no-cache add jq zip git bash build-base libffi-dev openssl-dev curl unixodbc unixodbc-dev coreutils docker-cli
 COPY requirements.txt /opt/requirements.txt
-RUN pip install -r requirements.txt && rm -rf /root/.cache
+RUN pip install -r /opt/requirements.txt && rm -rf /root/.cache
 
 COPY test.sh /opt/test.sh
 RUN chmod u+x,g+x,o+x /opt/test.sh
