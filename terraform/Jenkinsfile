@@ -13,7 +13,9 @@ pipeline{
 		stage('Building Image') {
 			steps{
                 script {
-                    dockerImage = docker.build registry + ":latest"
+                    dir("terraform"){
+                        dockerImage = docker.build registry + ":latest"
+                    }
                 }//script
             }//steps
 		}//stage
