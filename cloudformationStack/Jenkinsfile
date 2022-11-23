@@ -1,7 +1,7 @@
 /**
  * Pipeline for deploying locking and state infra for Terraform
  **/
-BUILD_IMAGE = "terraform:latest"
+BUILD_IMAGE = "muditchopra/terraform:latest"
 CONFIG = [
     prod: [
         'aws_region': 'ap-south-1',
@@ -22,7 +22,6 @@ pipeline {
     } // options
     agent {
         docker {
-            label 'docker-builder'
             image "$BUILD_IMAGE"
         } // docker
     } // agent
