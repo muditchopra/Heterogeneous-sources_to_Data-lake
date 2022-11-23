@@ -44,8 +44,6 @@ pipeline {
         } // stage
         stage('Deploy') {
             steps {
-                sendtoBuildHistory("Environment: ${ENV}")
-
                 withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                     cfnUpdate(
                         stack:"${STACK_NAME}",
