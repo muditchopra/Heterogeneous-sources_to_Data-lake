@@ -57,9 +57,9 @@ pipeline {
                         echo 'creating key pair'
                         withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                             dir("infra-setup/deploy-scripts") {
-                                sh "python add-key-pair.py $BUCKET_NAME $AWS_REGION"
-                                sh "python s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
-                                sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
+                                sh "python3 add-key-pair.py $BUCKET_NAME $AWS_REGION"
+                                sh "python3 s3-bucket.py $DATALAKE_BUCKET_NAME $AWS_REGION"
+                                sh "python3 upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
                             }
                         }
                     
