@@ -20,9 +20,9 @@ RUN apk add --update --no-cache ca-certificates jq python3-dev python3 make git 
     && pip install 'git-remote-codecommit'
 
 COPY --from=builder /bin/terraform /bin/terraform
-RUN addgroup -g 500 core && \
-    adduser  -u 500 -G core -h /opt -D core && \
-    chown -R core:core /opt
+RUN addgroup -g 500 docker && \
+    adduser  -u 500 -G docker -h /opt -D jenkins && \
+    chown -R jenkins:docker /opt
 
 RUN pip install pip -U && apk --no-cache add jq zip git bash build-base libffi-dev openssl-dev curl unixodbc unixodbc-dev coreutils docker-cli
 COPY requirements.txt /opt/requirements.txt
