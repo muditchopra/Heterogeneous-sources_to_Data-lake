@@ -8,4 +8,3 @@ pytest --version
 pylint --version
 ls -lrt /opt
 ls -lrt /usr/local/bin
-ls -lrt /usr/bin
