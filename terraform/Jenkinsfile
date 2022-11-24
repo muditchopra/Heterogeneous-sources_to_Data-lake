@@ -19,7 +19,15 @@ pipeline{
                 }//script
             }//steps
 		}//stage
-
+        stage('Test'){
+            steps {
+                script {
+                    docker.image("muditchopra/terraform:latest").inside{
+                        sh '/bin/sh /opt/test.sh'
+                    }
+                }
+            }
+        }
 		stage('Deploy Image') {
 			steps{
                 script {
