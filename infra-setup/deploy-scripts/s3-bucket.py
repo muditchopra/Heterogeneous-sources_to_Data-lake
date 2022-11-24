@@ -34,7 +34,7 @@ def uplode_s3_bucket(bucketname,region):
     for filename in csv_files:
         key = '%s/%s'% (folder_name, os.path.basename(filename))
         print("Putting %s as %s" % (filename,key))
-        s3.upload_file(filename, Bucket=bucketname, key=key)
+        s3.upload_file(filename, Bucket=bucketname, Key=key)
 
 def create_s3_bucket():
     bucketname = sys.argv[1]
