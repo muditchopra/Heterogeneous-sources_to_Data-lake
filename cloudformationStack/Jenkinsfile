@@ -47,7 +47,7 @@ pipeline {
                 withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                     cfnUpdate(
                         stack:"${STACK_NAME}",
-                        file:"cloudformationstack/statelockinfra.yml",
+                        file:"Heterogeneous-sources_to_Data-lake/cloudformationstack/statelockinfra.yml",
                         onFailure:"ROLLBACK",
                         pollInterval:5000,
                         timeoutInMinutes:10,

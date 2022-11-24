@@ -68,6 +68,6 @@ resource "aws_glue_crawler" "main" {
   role          = aws_iam_role.datalake.arn
 
   s3_target {
-    path = "s3://${lower(var.env)}-${lower(var.project_name)}-datalake-${var.aws_region}/silver/data"
+    path = "s3://${lower(var.env)}-${lower(var.project_name)}-datalake-${var.aws_region}/silver/customer-details"
   }
 }

@@ -42,4 +42,4 @@ Customer_Data = Join.apply(Insurance,
                                 'Customer_ID','CustomerID').drop_fields(['CardCustomerID','LoanCustomerID','Customer_ID'])
 
 s_history = Customer_Data.toDF().repartition(1)
-s_history.write.parquet('s3://prod-tyropower-datalake-ap-south-1/silver/data')
+s_history.write.parquet('s3://prod-tyropower-datalake-ap-south-1/silver/customer-details/')
