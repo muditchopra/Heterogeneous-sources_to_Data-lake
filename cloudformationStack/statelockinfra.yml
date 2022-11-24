@@ -16,11 +16,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub '${Environment}-${Prefix}-terraform-state-${AWS::Region}-${AWS::AccountId}'
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: 'aws:kms'
-              KMSMasterKeyID: !ImportValue CoreVPC:KmsKeys:S3:Id
       VersioningConfiguration:
         Status: Enabled
   TerraformStateBucketPolicy:
