@@ -53,7 +53,7 @@ pipeline {
         stage('Pre Deploy') {
             steps {
                 script{
-                    docker.image("${TF_IMG}").inside {
+                    
                         echo 'creating key pair'
                         withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                             dir("infra-setup/deploy-scripts") {
@@ -62,14 +62,14 @@ pipeline {
                                 sh "python upload-jobs.py $SCRIPT_BUCKET_NAME $AWS_REGION"
                             }
                         }
-                    }
+                    
                 }
             }
         }
         stage('Terraform Plan') {
             steps {
                 script{
-                    docker.image("${TF_IMG}").inside {
+                    
                         withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                             dir("${ENV}") {
                                 sh "terraform init"
@@ -80,7 +80,7 @@ pipeline {
                                 }
                             } // dir
                         } // withAWS
-                    }
+                    
                 } // script
             } // steps
         } // stage
@@ -111,13 +111,13 @@ pipeline {
             }
             steps {
                 script {
-                    docker.image("${TF_IMG}").inside {
+                    
                         withAWS(region: AWS_REGION, credentials: CREDENTIALS) {
                             dir("${ENV}") {
                                 sh "terraform apply -lock=true -input=false jenkins-backend.tfplan"
                             }
                         } // withAWS
-                    }
+                    
                 }
 
             } // steps
