@@ -25,9 +25,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20'))
     } // options
 
-    agent {
-        docker {image "$TF_IMG"}
-    } // agent
+    agent any
 
     stages {
         stage('Setup Environment') {
