@@ -10,7 +10,7 @@ data "aws_iam_policy" "AmazonS3FullAccess" {
 
 data "aws_ec2_managed_prefix_list" "s3" {
   filter {
-  	name = "prefix-list-id"
+  	name = "prefix-list-name"
     values = ["com.amazonaws.us-east-1.s3"] 
   }
 }
