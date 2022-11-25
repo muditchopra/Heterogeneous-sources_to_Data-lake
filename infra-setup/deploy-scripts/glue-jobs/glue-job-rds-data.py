@@ -52,5 +52,5 @@ print("write the data to s3")
 glueContext.write_dynamic_frame.from_options(
        frame = Customer_Data,
        connection_type = "s3",
-       connection_options = {"path": "s3://prod-tyropower-datalake-ap-south-1/silver/customer-details"},
+       connection_options = {"path": "s3://prod-tyropower-datalake-us-east-1/silver/customer-details"},
        format = "parquet")

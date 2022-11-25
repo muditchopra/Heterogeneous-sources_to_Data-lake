@@ -6,7 +6,7 @@ TF_IMG = "muditchopra/terraform:latest"
 
 CONFIG = [
     prod: [
-        'aws_region': 'ap-south-1',
+        'aws_region': 'us-east-1',
         'credentials': 'external-jenkins-access',
         'registryCredential': 'dockerhub'
     ]

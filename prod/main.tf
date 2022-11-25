@@ -2,7 +2,7 @@ module "infraSetup" {
   source      = "../infra-setup"
   env = "Prod"
   
-  aws_region = "ap-south-1"
+  aws_region = "us-east-1"
   key_name = "tyropower-management-key"
   rds_mysql = {
       master = {

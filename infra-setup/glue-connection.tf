@@ -26,10 +26,10 @@ resource "aws_security_group_rule" "glue-s3" {
     security_group_id        = aws_security_group.mysql.id
 }
 
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = data.aws_ssm_parameter.vpcid.value
-  service_name = "com.amazonaws.ap-south-1.s3"
-}
+# resource "aws_vpc_endpoint" "s3" {
+#   vpc_id       = data.aws_ssm_parameter.vpcid.value
+#   service_name = "com.amazonaws.us-east-1.s3"
+# }
 
 resource "aws_glue_catalog_database" "catalog_database" {
   name = "${lower(var.project_name)}-${lower(var.env)}-catalog-db"
