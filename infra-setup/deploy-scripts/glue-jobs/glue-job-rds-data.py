@@ -33,8 +33,6 @@ LoanDetails = LoanDetails.apply_mapping(
                                      ("Type","String","LoanType","String")]
 )
 
-
-
 print("convert string to int (Y&N)->(1&0)")
 CustomerDetails['SeniorCitizen'] = CustomerDetails['SeniorCitizen'].map(f= lambda t: 1 if t=='Y' else 0)
 CustomerDetails['Loan'] = CustomerDetails['Loan'].map(f= lambda t: 1 if t=='Y' else 0)

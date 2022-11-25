@@ -35,16 +35,24 @@ def uplode_s3_bucket(bucketname,region):
         key = "%s/%s" % (folder_name, os.path.basename(filename))
         print("Putting %s as %s" % (filename,key))
         s3.upload_file(filename, Bucket=bucketname, Key=key)
+    return
 
 def create_s3_bucket():
     bucketname = sys.argv[1]
     region = sys.argv[2]
     s3 = s3_client(region)
-    bucket = s3.create_bucket(Bucket=bucketname, CreateBucketConfiguration={
-        'LocationConstraint': region
-    })
-    encrypt_bucket(region,bucketname,s3)
-    uplode_s3_bucket(bucketname,region)
+    try:
+      bucket = s3.create_bucket(Bucket=bucketname, CreateBucketConfiguration={
+          'LocationConstraint': region
+      })
+      encrypt_bucket(region,bucketname,s3)
+      uplode_s3_bucket(bucketname,region)
+    except ClientError as e:
+      if e.response['Error']['Code'] == 'BucketAlreadyOwnedByYou':
+        print('Bucket "{}" already exists'.format(bucketname))
+      else:
+        raise ClientError
+    return
 
 
 if __name__ == '__main__':
