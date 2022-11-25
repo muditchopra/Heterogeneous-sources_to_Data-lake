@@ -42,9 +42,7 @@ def create_s3_bucket():
     region = sys.argv[2]
     s3 = s3_client(region)
     try:
-      bucket = s3.create_bucket(Bucket=bucketname, CreateBucketConfiguration={
-          'LocationConstraint': region
-      })
+      bucket = s3.create_bucket(Bucket=bucketname)
       encrypt_bucket(region,bucketname,s3)
       uplode_s3_bucket(bucketname,region)
     except ClientError as e:
