@@ -1,5 +1,5 @@
 resource "aws_security_group" "management" {
-    vpc_id      = data.aws_cloudformation_export.vpc_id.value
+    vpc_id      = data.aws_ssm_parameter.vpcid.value
     name        = "${lower(var.project_name)}-${lower(var.env)}-management-sg"
     description = "security group for management"
 
@@ -17,7 +17,7 @@ resource "aws_security_group" "management" {
 }
 
 resource "aws_security_group" "mysql" {
-    vpc_id      = data.aws_cloudformation_export.vpc_id.value
+    vpc_id      = data.aws_ssm_parameter.vpcid.value
     name        = "${lower(var.project_name)}-${lower(var.env)}-mysql-sg"
     description = "security group for mysql servers"
 
