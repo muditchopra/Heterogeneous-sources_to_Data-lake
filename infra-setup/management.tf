@@ -10,7 +10,7 @@ resource "aws_security_group_rule" "management_ec2" {
 }
 ##TODO subnet
 resource "aws_instance" "management" {
-  ami                    = data.aws_ami.latest.id
+  ami                    = "ami-0b0dcb5067f052a63"
   instance_type          = "t2.micro"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.management.id]

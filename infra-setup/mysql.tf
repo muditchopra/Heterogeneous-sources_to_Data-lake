@@ -29,7 +29,7 @@ resource "aws_rds_cluster" "mysql" {
   engine                    = "mysql"
   engine_version            = "8.0.30"
   db_cluster_instance_class = "db.t3.micro"
-  availability_zones        = ["us-east-1b"]
+  availability_zones        = ["us-east-1c"]
   database_name             = var.rds_mysql.app.database
   master_username           = var.rds_mysql.master.username
   master_password           = var.rds_mysql.master.password
