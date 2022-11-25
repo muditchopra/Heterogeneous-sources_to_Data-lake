@@ -32,7 +32,7 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 resource "aws_glue_catalog_database" "catalog_database" {
-  name = "${lower(var.project_name)}-${lower(var.env)}-Catalog-db"
+  name = "${lower(var.project_name)}-${lower(var.env)}-catalog-db"
   description = ""
 }
 
