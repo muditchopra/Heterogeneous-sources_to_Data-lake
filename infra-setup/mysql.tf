@@ -31,7 +31,7 @@ resource "aws_rds_cluster" "mysql" {
   db_cluster_instance_class = "db.t3.micro"
   # multi_az                  = false
   apply_immediately         = true
-  # availability_zones        = ["us-east-1c"]
+  availability_zones        = ["us-east-1c"]
   allocated_storage         = 20
   database_name             = var.rds_mysql.app.database
   master_username           = var.rds_mysql.master.username
