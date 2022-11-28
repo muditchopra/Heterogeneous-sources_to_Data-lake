@@ -68,7 +68,7 @@ pipeline {
                         parameters: [ [
                             $class: 'BooleanParameterDefinition',
                             defaultValue: false,
-                            description: 'Create behaviosense user and Tables in DB',
+                            description: 'Create tyropower user and Tables in DB',
                             name: 'confirm'
                         ] ]
                     )
