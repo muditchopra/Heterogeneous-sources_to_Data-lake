@@ -17,7 +17,7 @@ pipeline {
     parameters {
         choice(
             name: 'ENV',
-            choices: ['dummy', 'dev', 'sit', 'prod'],
+            choices: ['demo', 'prod'],
             description: 'Select Target Environment'
         )
     } // parameters
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     ENV = params.ENV
-                    if (ENV == null || ENV == 'dummy') {
+                    if (ENV == null || ENV == 'demo') {
                         currentBuild.result = 'ABORTED'
                         error("Invalid or missing Environment: ${ENV}")
                     }
