@@ -29,7 +29,7 @@ resource "aws_rds_cluster" "mysql" {
   engine                    = "mysql"
   engine_version            = "8.0.30"
   db_cluster_instance_class = "db.t3.micro"
-  multi_az                  = false
+  # multi_az                  = false
   apply_immediately         = true
   # availability_zones        = ["us-east-1c"]
   allocated_storage         = 20
@@ -39,6 +39,6 @@ resource "aws_rds_cluster" "mysql" {
   vpc_security_group_ids    = [ aws_security_group.mysql.id ]
   db_subnet_group_name      = data.aws_db_subnet_group.database.name
   storage_encrypted         = true
-  publicly_accessible       = false
+  # publicly_accessible       = false
   kms_key_id                = aws_kms_key.mysql.arn
 }
