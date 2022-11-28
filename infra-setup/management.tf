@@ -5,7 +5,7 @@ resource "aws_security_group_rule" "management_ec2" {
     from_port                = 22
     to_port                  = 22
     protocol                 = "TCP"
-    cidr_blocks              = ["10.84.27.120/32"]
+    cidr_blocks              = ["0.0.0.0/0"]
     security_group_id        = aws_security_group.management.id
 }
 ##TODO subnet
