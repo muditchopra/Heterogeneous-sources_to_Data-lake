@@ -29,7 +29,7 @@ resource "aws_rds_cluster" "mysql" {
   engine                    = "mysql"
   engine_version            = "8.0.30"
   db_cluster_instance_class = "db.t3.micro"
-  multi_az                  = false
+  # multi_az                  = false
   availability_zones        = "us-east-1c"
   allocated_storage         = 20
   database_name             = var.rds_mysql.app.database
