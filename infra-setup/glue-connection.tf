@@ -55,12 +55,3 @@ resource "aws_glue_connection" "jdbc-connection" {
 resource "aws_lakeformation_resource" "s3-datalake" {
   arn = data.aws_s3_bucket.s3.arn
 }
-
-resource "aws_lakeformation_permissions" "workflow_role" {
-  principal   = aws_iam_role.datalake.arn
-  permissions = ["ALL"]
-
-  data_location {
-    arn = aws_lakeformation_resource.s3-datalake.arn
-  }
-}
