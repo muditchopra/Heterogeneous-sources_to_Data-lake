@@ -30,7 +30,7 @@ resource "aws_db_instance" "mysql" {
   engine_version            = "8.0.28"
   instance_class            = "db.t3.micro"
   multi_az                  = false
-  availability_zones        = ["us-east-1c"]
+  availability_zone        = "us-east-1c"
   allocated_storage         = 20
   db_name                   = var.rds_mysql.app.database
   username                  = var.rds_mysql.master.username
