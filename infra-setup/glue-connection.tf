@@ -38,7 +38,7 @@ resource "aws_glue_catalog_database" "catalog_database" {
 
 resource "aws_glue_connection" "jdbc-connection" {
   connection_properties = {
-    JDBC_CONNECTION_URL = "jdbc:mysql://${aws_rds_cluster.mysql.endpoint}/${lower(var.project_name)}"
+    JDBC_CONNECTION_URL = "jdbc:mysql://${8aws_db_instance.mysql.endpoint}/${lower(var.project_name)}"
     PASSWORD            = var.rds_mysql.app.password
     USERNAME            = var.rds_mysql.app.username
   }
