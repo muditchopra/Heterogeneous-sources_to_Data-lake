@@ -46,6 +46,7 @@ resource "aws_glue_connection" "jdbc-connection" {
   name = "${lower(var.project_name)}-${lower(var.env)}-jdbc-connection"
 
   physical_connection_requirements {
+    availability_zone      = aws_db_instance.mysql.availability_zone
     security_group_id_list = [aws_security_group.mysql.id]
     subnet_id              = data.aws_ssm_parameter.vpcsubnet.value
   }
