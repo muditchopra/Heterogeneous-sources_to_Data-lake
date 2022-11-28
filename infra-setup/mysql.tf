@@ -27,7 +27,7 @@ resource "aws_security_group_rule" "management" {
 resource "aws_rds_cluster" "mysql" {
   cluster_identifier        = "${lower(var.project_name)}-${lower(var.env)}"
   engine                    = "mysql"
-  engine_version            = "8.0.30"
+  engine_version            = "8.0.28"
   db_cluster_instance_class = "db.t3.micro"
   # multi_az                  = false
   apply_immediately         = true
