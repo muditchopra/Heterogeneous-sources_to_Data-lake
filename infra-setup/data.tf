@@ -15,8 +15,8 @@ data "aws_ec2_managed_prefix_list" "s3" {
   }
 }
 
-data "aws_kms_alias" "s3" {
-  name = "alias/core/s3"
+data "aws_kms_key" "s3" {
+  key_id = "alias/core/s3"
 }
 
 data "aws_db_subnet_group" "database" {
