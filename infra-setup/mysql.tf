@@ -20,16 +20,16 @@ resource "aws_security_group_rule" "management" {
     from_port                = 3306
     to_port                  = 3306
     protocol                 = "TCP"
-    cidr_blocks              = ["0.0.0.0/0"]
+    source_security_group_id = aws_security_group.management.id
     security_group_id        = aws_security_group.mysql.id
 }
 
 resource "aws_security_group_rule" "jenkins" {
     type                     = "ingress"
-    from_port                = 0
-    to_port                  = 65535
-    protocol                 = "ALL TCP"
-    source_security_group_id = aws_security_group.management.id
+    from_port                = 3306
+    to_port                  = 3306
+    protocol                 = "TCP"
+    cidr_blocks              = ["0.0.0.0/0"]
     security_group_id        = aws_security_group.mysql.id
 }
 
