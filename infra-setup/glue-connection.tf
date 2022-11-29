@@ -54,5 +54,6 @@ resource "aws_glue_connection" "jdbc-connection" {
 
 
 resource "aws_lakeformation_resource" "s3-datalake" {
-  arn = data.aws_s3_bucket.s3.arn
+  arn      = data.aws_s3_bucket.s3.arn
+  role_arn = aws_iam_role.datalake.arn
 }
