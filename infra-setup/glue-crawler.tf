@@ -35,6 +35,11 @@ resource "aws_iam_role" "datalake" {
             "Resource": [
                 "*"
             ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "kms:Decrypt",
+            "Resource": "${data.aws_kms_alias.s3.arn}"
         }
     ]
 })

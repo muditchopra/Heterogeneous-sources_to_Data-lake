@@ -15,6 +15,10 @@ data "aws_ec2_managed_prefix_list" "s3" {
   }
 }
 
+data "aws_kms_alias" "s3" {
+  name = "alias/core/s3"
+}
+
 data "aws_db_subnet_group" "database" {
   name = "rds-ec2-db-subnet-group-1"
 }
