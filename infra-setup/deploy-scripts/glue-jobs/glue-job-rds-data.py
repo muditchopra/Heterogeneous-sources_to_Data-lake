@@ -30,6 +30,27 @@ Insurance = glueContext.create_dynamic_frame.from_catalog(
              database="tyropower-prod-Catalog-db",
              table_name="insurance_csv")
 
+print("Rename columns in loan table")
+LoanDetails = LoanDetails.apply_mapping(
+                                    [("term","String","loanterm","String"),
+                                     ("type","String","loantype","String")]
+)
+LoanDetails.printSchema()
+
+S3bucket_node3 = glueContext.getSink(
+    path="s3://prod-tyropower-datalake-us-east-1/silver/customer-details/customer",
+    connection_type="s3",
+    updateBehavior="UPDATE_IN_DATABASE",
+    partitionKeys=[],
+    enableUpdateCatalog=True,
+    transformation_ctx="S3bucket_node3",
+)
+
+S3bucket_node3.setCatalogInfo(
+    catalogDatabase="tyropower-prod-Catalog-db", catalogTableName="customer_data"
+)
+S3bucket_node3.setFormat("glueparquet")
+S3bucket_node3.writeFrame(CustomerDetails)
 
 S3bucket_node3 = glueContext.getSink(
     path="s3://prod-tyropower-datalake-us-east-1/silver/customer-details/creditcard",
@@ -84,12 +105,6 @@ CreditCard = CreditCard.drop_fields(['annual_income'])
 LoanDetails = LoanDetails.drop_fields(['annual_income','credit_score','homeownership'])
 CreditCard.printSchema()
 
-print("Rename columns in loan table")
-LoanDetails = LoanDetails.apply_mapping(
-                                    [("term","String","loanterm","String"),
-                                     ("type","String","loantype","String")]
-)
-LoanDetails.printSchema()
 # print("convert string to int (Y&N)->(1&0)")
 # CustomerDetails['SeniorCitizen'] = CustomerDetails['SeniorCitizen'].map(f= lambda t: 1 if t=='Y' else 0)
 # CustomerDetails['Loan'] = CustomerDetails['Loan'].map(f= lambda t: 1 if t=='Y' else 0)
@@ -121,7 +136,7 @@ S3bucket_node3 = glueContext.getSink(
 )
 
 S3bucket_node3.setCatalogInfo(
-    catalogDatabase="tyropower-prod-Catalog-db", catalogTableName="customer_data"
+    catalogDatabase="tyropower-prod-Catalog-db", catalogTableName="final_join_data"
 )
 S3bucket_node3.setFormat("glueparquet")
 S3bucket_node3.writeFrame(Customer_Data)

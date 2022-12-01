@@ -1,21 +1,27 @@
 -- TYPE OF LOANS
-SELECT DISTINCT loantype FROM "tyropower-prod-catalog-db"."customer_data"
+SELECT DISTINCT loantype FROM "tyropower-prod-catalog-db"."loan_data"
 
 -- TYPE OF INSURANCE
-SELECT DISTINCT policytype FROM "tyropower-prod-catalog-db"."customer_data"
+SELECT DISTINCT policytype FROM "tyropower-prod-catalog-db"."insurance_data"
 
 -- HOME LOAN
-SELECT customerid,gender,mobile,email FROM "tyropower-prod-catalog-db"."customer_data"
-        WHERE seniorcitizen='N' AND curraccountbalance>=120000 AND home_ownership='Rent' AND annualincome>=8 
-        AND loantype!='home loan';
+SELECT customerid,gender,mobile,email FROM "tyropower-prod-catalog-db"."customer_data" c
+        WHERE c.customerid IN (select cardcustomerid from "tyropower-prod-catalog-db"."loan_data" where loantype!='home loan')
+        c.seniorcitizen='N' AND c.curraccountbalance>=120000 AND c.home_ownership='Rent' AND c.annualincome>=8 
+        AND ;
+
+select customerid,mobile,email from "tyropower-prod-catalog-db"."customer_data" c 
+                where c.customerid IN (select cardcustomerid from "tyropower-prod-catalog-db"."creditcard" where creditscore>=795 and annualspent>=250000)
+                and c.seniorcitizen='N' and c.curraccountbalance>=120000 and c.home_ownership='Rent' and c.annualincome>=8;
 
 -- INCREASE CREDIT CARD LIMIT
-SELECT customerid,mobile,email FROM "tyropower-prod-catalog-db"."customer_data"
-        WHERE creditscore>=795 AND annualspent>=250000;
+select customerid,mobile,email from "tyropower-prod-catalog-db"."customer_data" c 
+                where c.customerid IN (select cardcustomerid from "tyropower-prod-catalog-db"."creditcard" where creditscore>=795 and annualspent>=250000);
 
 -- EDUCATION LOAN
-SELECT customerid,mobile,email FROM "tyropower-prod-catalog-db"."customer_data"
-        WHERE age IN (20,27) AND occupation='student' AND loantype!='education loan'
+SELECT customerid,mobile,email FROM "tyropower-prod-catalog-db"."customer_data" c
+        WHERE c.customerid IN (select cardcustomerid from "tyropower-prod-catalog-db"."loan_data" where loantype!='education loan')
+        AND age IN (20,27) AND occupation='student';
 
 SELECT customerid,mobile,email FROM "tyropower-prod-catalog-db"."customer_data"
         WHERE age IN (45,60) 
