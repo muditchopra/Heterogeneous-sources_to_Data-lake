@@ -5,7 +5,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "example" {
     id = "rule-1"
 
     expiration {
-      days = 15
+      days = 7
     }
 
     status = "Enabled"
@@ -24,20 +24,26 @@ resource "aws_iam_policy" "lambda_logging" {
   description = "IAM policy for logging from a lambda"
 
   policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"
+        },
+        {
+            "Effect": "Allow",
             "Action": [
-                "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
             ],
-            "Resource": "arn:aws:logs:*:*:*",
-            "Effect": "Allow"
-            }
-        ]
-    }
+            "Resource": [
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"
+            ]
+        }
+    ]
+}
 EOF
 }
 

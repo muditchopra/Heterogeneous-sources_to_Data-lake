@@ -29,7 +29,7 @@ def encrypt_bucket(region, bucketname, s3_client):
 
 def uplode_s3_bucket(bucketname,region):
     s3 = s3_client(region)
-    py_files = glob.glob("glue-jobs/glue-job-*.py")
+    py_files = glob.glob("glue-jobs/*.py")
     folder_name = 'scripts'
     for filename in py_files:
         key = "%s/%s" % (folder_name, os.path.basename(filename))
