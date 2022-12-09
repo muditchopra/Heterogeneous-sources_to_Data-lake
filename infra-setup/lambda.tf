@@ -23,7 +23,7 @@ resource "aws_iam_policy" "lambda_logging" {
   path        = "/"
   description = "IAM policy for logging from a lambda"
 
-  policy = <<EOF
+  policy = jsonencode(
   {
     "Version": "2012-10-17",
     "Statement": [
@@ -43,8 +43,7 @@ resource "aws_iam_policy" "lambda_logging" {
             ]
         }
     ]
-}
-EOF
+})
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
