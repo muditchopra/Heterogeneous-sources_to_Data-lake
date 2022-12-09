@@ -11,6 +11,14 @@ resource "aws_iam_role" "datalake" {
                 "Service": "glue.amazonaws.com"
             },
             "Action": "sts:AssumeRole"
+        },
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "lambda.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
         }
     ]
   })

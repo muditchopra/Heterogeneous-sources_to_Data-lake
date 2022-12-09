@@ -34,3 +34,9 @@ data "aws_ssm_parameter" "vpcsubnet" {
 data "aws_s3_bucket" "s3" {
   bucket = "prod-tyropower-datalake-us-east-1"
 }
+
+data "archive_file" "zip" {
+  type        = "zip"
+  source_file = "${path.module}/lambda/index.py"
+  output_path = "${path.module}/lambda/file/index.zip"
+}
