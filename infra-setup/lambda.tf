@@ -58,7 +58,7 @@ resource "aws_lambda_function" "func" {
   function_name    = "${lower(var.env)}-${lower(var.project_name)}-lambda"
   role             = aws_iam_role.datalake.arn
   handler          = "index.lambda_handler"
-  runtime          = "go1.x"
+  runtime          = "python3.6"
 }
 
 resource "aws_lambda_permission" "allow_bucket" {
