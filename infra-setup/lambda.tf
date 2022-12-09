@@ -1,3 +1,18 @@
+resource "aws_s3_bucket_lifecycle_configuration" "example" {
+  bucket = data.aws_s3_bucket.s3.id
+
+  rule {
+    id = "rule-1"
+
+    expiration {
+      days = 15
+    }
+
+    status = "Enabled"
+  }
+}
+
+
 resource "aws_cloudwatch_log_group" "example" {
   name              = "/aws/lambda/${lower(var.env)}-${lower(var.project_name)}-lambda"
   retention_in_days = 14
