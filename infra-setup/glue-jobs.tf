@@ -6,6 +6,7 @@ resource "aws_glue_job" "job" {
   command {
     script_location = "s3://${lower(var.env)}-${lower(var.project_name)}-scripts-${var.aws_region}/scripts/glue-job-rds-data.py"
   }
+  connections = [aws_glue_connection.jdbc-connection.id]
 }
 
 resource "aws_glue_job" "job2" {
